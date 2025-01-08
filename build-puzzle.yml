@@ -1,0 +1,32 @@
+stages:
+  - stage: Build
+    displayName: "Build ReactJS App"
+    jobs:
+      - job: Build
+        displayName: "Install Dependencies and Build"
+        pool: default
+
+        steps:
+          # Checkout code
+          #- task: Checkout@1
+
+          # Set up Node.js environment
+          - task: UseNode@1
+            inputs:
+              version: "16.x"  # Adjust Node.js version as needed
+
+          # Install dependencies
+          - script: |
+              npm install
+            displayName: "Install Node.js Dependencies"
+
+          # Build ReactJS app
+          - script: |
+              npm run build
+            displayName: "Build ReactJS App"
+
+          # Publish build artifacts
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: "$(System.DefaultWorkingDirectory)/build"
+              ArtifactName: "$(buildArtifactName)"
